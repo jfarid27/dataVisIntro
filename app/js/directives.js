@@ -22,7 +22,7 @@ angular.module('myApp.directives', []).
 
          var force = d3.layout.force()
            .charge(-120)
-           .linkDistance(30)
+           .linkDistance(100)
            .size([width, height]);
 
          var svg = window.append("svg")
