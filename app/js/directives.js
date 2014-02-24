@@ -9,7 +9,36 @@ angular.module('myApp.directives', []).
       elm.text(version);
     };
   }]).
-  directive('network', ["networkData", function(data) {
+  directive('pagebar', [ function() {
+    return {
+      restrict: 'E',
+
+      link: function(scope,elems, attrs){
+      }
+    }
+  }]).
+  directive('chapter1', [ function() {
+    return {
+      restrict: 'E',
+      link: function(scope,elems, attrs){
+         var window = d3.select("chapter1")
+
+         var width = 960,
+         height = 500;
+
+         var svg = window.append("svg")
+           .attr("width", width)
+           .attr("height", height);
+
+         var datatypes = scope.datatypes;
+         var visualattrs = scope.visualattrs;
+
+         
+
+      }
+    };
+  }]).
+  directive('network', [function() {
     return {
        restrict : 'E',
        link: function(scope, elems, attrs){
