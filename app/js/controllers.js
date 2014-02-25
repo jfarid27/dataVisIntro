@@ -42,7 +42,8 @@ angular.module('myApp.controllers', []).
       {"type": "Ordinal", "attribute":"Position", "color":"green" },
       {"type": "Ordinal", "attribute":"Area", "color":"green" },
       {"type": "Ordinal", "attribute":"Volume", "color":"green" },
-      {"type": "Ordinal", "attribute":"Texture", "color":"green" },
+      {"type": "Ordinal", "attribute":"Color", "color":"yellow" },
+      {"type": "Ordinal", "attribute":"Texture", "color":"yellow" },
       {"type": "Quantitative - Interval", 
        "attribute":"Length",
        "color":"green"

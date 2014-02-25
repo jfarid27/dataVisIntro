@@ -17,6 +17,124 @@ angular.module('myApp.directives', []).
       }
     }
   }]).
+  directive('coloring', [function() {
+    return {
+      restrict: 'E',
+      link: function(scope,elems, attrs){
+
+         var window = d3.select("coloring")
+
+         var width = 960,
+         height = 450;
+         
+         var svg = window.append("svg")
+           .attr("width", width)
+           .attr("height", height);
+
+         var cScale = d3.scale.linear()
+           .domain([0, 4])
+           .range([0, 255]);
+
+         var text1 = svg.append("g")
+                .attr("class", "info")
+              .append("text")
+                .style({"font-family":"inherit",
+                    "font-size":"24",
+                    "fill":"black"
+                })
+                .attr("y", function(d, i){
+                  return 100;
+                })
+                .attr("x", function(d, i){
+                  return 40;
+                })
+                .text(function(d){
+                  return "Encode nominal data with different colors";
+                });
+
+         var text2 = svg.append("g")
+                .attr("class", "info")
+              .append("text")
+                .style({"font-family":"inherit",
+                    "font-size":"24",
+                    "fill":"black"
+                })
+                .attr("y", function(d, i){
+                  return 200;
+                })
+                .attr("x", function(d, i){
+                  return 40;
+                })
+                .text(function(d){
+                  return "Encode ordinal data with different hues";
+                });
+
+
+         var text3 = svg.append("g")
+                .attr("class", "info")
+              .append("text")
+                .style({"font-family":"inherit",
+                    "font-size":"24",
+                    "fill":"black"
+                })
+                .attr("y", function(d, i){
+                  return 350;
+                })
+                .attr("x", function(d, i){
+                  return 40;
+                })
+                .text(function(d){
+                  return "Avoid encoding quantitative data with colors, hues, volume, and area";
+                });
+              
+
+         var nominal = svg.append("g").selectAll("rects")
+             .data(d3.range(5)).enter()
+             .append("rect")
+               .attr({
+                 "class": "nominal",
+                 "width": 40,
+                 "height": 40,
+                 "x": function(d, i){return ((d) * 50) + 80 },
+                 "y": 125,
+                 "fill": "white"
+               })
+
+         var data = d3.range(5);
+
+         var ordinal = svg.append("g").selectAll("rect")
+             .data(data).enter()
+               .append("rect")
+               .attr({
+                 "class":"ordinal",
+                 "width": 40,
+                 "height": 40,
+                 "x": function(d, i){return ((d) * 50) + 80 },
+                 "y": 225,
+                 "fill": "white"
+               })
+
+            svg.selectAll("rect.ordinal")
+              .transition().duration(1000)
+                .attr("fill", function(d){
+                   
+                   return "rgb(" + Math.floor(cScale(d)) +","+ Math.floor(cScale(d) ) + ",0)" 
+                });
+
+            svg.selectAll("rect.nominal")
+              .transition().duration(1000)
+                .attr("fill", function(d){
+                   
+                   return "rgb(" 
+                     + Math.floor(Math.random()*255) + "," 
+                     + Math.floor(Math.random()*255) + "," 
+                     + Math.floor(Math.random()*255) 
+                     + ")" 
+                });
+               
+      }
+    };
+  }]).
   directive('chapter1', [ function() {
     return {
       restrict: 'E',

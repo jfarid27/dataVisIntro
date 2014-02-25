@@ -19,6 +19,10 @@ config(['$routeProvider', function($routeProvider) {
     templateUrl: 'partials/chapter_1_1.html', 
     controller: 'chapter1Ctrl'});
 
+  $routeProvider.when('/chapter-1-2', {
+    templateUrl: 'partials/chapter_1_2.html', 
+    controller: 'chapter1Ctrl'});
+  
   $routeProvider.otherwise({redirectTo: '/start'});
 
 }]);
