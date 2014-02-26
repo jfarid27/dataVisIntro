@@ -6,6 +6,19 @@ angular.module('myApp.controllers', []).
   controller('startCtrl', [function() {
 
   }])
+  .controller('chapter2Ctrl', ['$scope', function($scope){
+
+    $scope.shapes1 = d3.range(50).map(function(d){
+      return {"x": Math.random(), "y":Math.random() }
+    });
+    $scope.shapes2 = d3.range(30).map(function(d){
+      return {"x": Math.random(), "y":Math.random() }
+    });
+    $scope.shapes3 = d3.range(30).map(function(d){
+      return {"x": Math.random(), "y":Math.random() }
+    });
+
+  }])
   .controller('chapter1Ctrl', ['$scope', function($scope){
 
     $scope.datatypes = [

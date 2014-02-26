@@ -9,11 +9,200 @@ angular.module('myApp.directives', []).
       elm.text(version);
     };
   }]).
-  directive('pagebar', [ function() {
+  directive('eyes2', [ function() {
     return {
       restrict: 'E',
-
       link: function(scope,elems, attrs){
+         
+         var window = d3.select("eyes2")
+
+         var width = 960,
+         height = 450;
+         var colors = ["red", "blue", "green", "orange", "purple"]
+         var clicked = false; 
+         var svg = window.append("svg")
+           .attr("width", width)
+           .attr("height", height);
+         }
+
+         var xScale = d3.scale.linear().domain([0, 1])
+              .range([40, width-40]);
+         var yScale = d3.scale.linear().domain([0, 1])
+              .range([40, height-40]);
+
+         svg.append("g").attr("class", "squares")
+         svg.append("g").attr("class", "circles")
+         svg.append("g").attr("class", "circle")
+
+         var circles = d3.select(".circles").selectAll("circles")
+            .data(scope.shapes1).enter()
+            .append("circle")
+             .attr({     
+               "class":"bluecircle",
+               "cx": -80,
+               "cy": function(d) {return yScale(Math.random()},
+               "r": 12,
+               "fill": "#blue"
+             })
+
+         var squares = d3.select(".squares").selectAll("rect")
+            .data(scope.shapes1).enter()
+            .append("rect")
+             .attr({     
+               "class":"rectangle",
+               "x": -80,
+               "y": function(d) {return yScale(Math.random()},
+               "height": 24,
+               "width": 24,
+               "fill": "#blue"
+             })
+
+        d3.select(".circle").append("circle")
+             .attr({     
+               "class":"redcircle",
+               "cx": -80,
+               "cy": function(d) {return yScale(Math.random()},
+               "r": 12,
+               "fill": "#red"
+             }).on("click", function(){
+
+                d3.select(".redcircle")
+                  .transition().duration(700)
+                  .attr("fill", "yellow")
+
+             })
+
+
+
+    };
+  }]).
+  directive('eyes1', [ function() {
+    return {
+      restrict: 'E',
+      link: function(scope,elems, attrs){
+         
+         var window = d3.select("eyes1")
+
+         var width = 960,
+         height = 450;
+         var clicked = false; 
+         var svg = window.append("svg")
+           .attr("width", width)
+           .attr("height", height);
+ 
+         var xScale = d3.scale.linear()
+            .domain([0,1])
+            .range([40, width-40])
+         var yScale = d3.scale.linear()
+            .domain([0,1])
+            .range([40, height-40])
+
+         var button = svg.append("text")
+            .attr({ 
+                   "x": width-50,
+                   "y": height -40
+            })
+            .style({
+               "font-family":"inherit",
+               "font-size": 24,
+               "fill":"grey"
+            })
+            .text("Next")
+              .on("click", function(){
+                 if (!clicked){
+                   clicked = true
+                   phase1();
+                 }
+              });
+         
+
+         svg.append("g").attr("class", "circles")
+         svg.append("g").attr("class", "single")
+
+         var circlesGroup = d3.select("g.circles")
+
+         var circles = circlesGroup.selectAll("circle")
+             .data(scope.shapes1).enter()
+             .append("circle")
+             .attr({     
+               "class":"old",
+               "cx": -80,
+               "cy": function(d) {return yScale(d.y)},
+               "r": 12,
+               "fill": "#3399FF"
+             })
+         
+         svg.append("g")
+             .append("rect")
+             .attr({     
+               "x": function(d) {return -80 },
+               "y": function(d) {return yScale(Math.random())},
+               "height": 24,
+               "width": 24,
+               "style": "fill: #3399FF"
+             })
+
+         circlesGroup.selectAll("circle")
+            .transition()
+               .delay("1000")
+               .duration("2000")
+            .attr({     
+              "cx": function(d) {return xScale(d.x) }
+            })
+
+         svg.selectAll("rect")
+            .transition()
+               .delay("1000")
+               .duration("2000")
+            .attr({     
+               "x": function(d) {return xScale(Math.random()) },
+            })
+
+         function phase2() {
+
+              d3.select("g.single")
+                .selectAll("circle").data([1]).enter().append("circle")
+                   .attr({     
+                     "cx": function() {return -80 },
+                     "cy": function() {return yScale(Math.random()) },
+                     "r": 12,
+                     "style": "fill: #FF0000"
+                    });
+                 
+              svg.selectAll("circle").transition()
+                   .delay("1000")
+                   .duration("2000")
+                 .attr({     
+                   "cx": function() {return xScale(Math.random() ) }
+                 });
+
+         };
+
+         function phase1(){
+
+           svg.selectAll("circle")
+            .transition()
+               .delay("1000")
+               .duration("2000")
+            .attr({     
+              "cx": function(d) {return -80 }
+            }).each("end", function(){
+
+               phase2() 
+
+            })
+
+
+           svg.selectAll("rect")
+            .transition()
+               .delay("1000")
+               .duration("2000")
+            .attr({     
+               "x": function(d) {return -80 },
+            }).each("end", function(){ d3.select(this).remove() })
+
+         };
+            
       }
     }
   }]).
@@ -26,6 +215,7 @@ angular.module('myApp.directives', []).
 
          var width = 960,
          height = 450;
+         var colors = ["red", "blue", "green", "orange", "purple"]
          
          var svg = window.append("svg")
            .attr("width", width)
@@ -124,12 +314,7 @@ angular.module('myApp.directives', []).
             svg.selectAll("rect.nominal")
               .transition().duration(1000)
                 .attr("fill", function(d){
-                   
-                   return "rgb(" 
-                     + Math.floor(Math.random()*255) + "," 
-                     + Math.floor(Math.random()*255) + "," 
-                     + Math.floor(Math.random()*255) 
-                     + ")" 
+                   return colors[d]
                 });
                
       }
@@ -179,7 +364,7 @@ angular.module('myApp.directives', []).
             .style({
                "font-family":"inherit",
                "font-size": 24,
-               "fill":"green"
+               "fill":"grey"
             })
             .text("Next")
               .on("click", function(){
