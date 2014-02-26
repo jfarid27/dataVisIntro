@@ -23,7 +23,6 @@ angular.module('myApp.directives', []).
          var svg = window.append("svg")
            .attr("width", width)
            .attr("height", height);
-         }
 
          var xScale = d3.scale.linear().domain([0, 1])
               .range([40, width-40]);
@@ -72,7 +71,7 @@ angular.module('myApp.directives', []).
 
              })
 
-
+       }
 
     };
   }]).
