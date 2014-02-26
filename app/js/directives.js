@@ -81,11 +81,11 @@ angular.module('myApp.directives', []).
              })
 
         d3.selectAll("rect")
-            .transition().duration(1000).delay(500)
+            .transition().duration(1000)
             .attr("x", function(d){ return xScale(Math.random())})
 
         d3.selectAll("circle")
-            .transition().duration(1000).delay(500)
+            .transition().duration(1000)
             .attr("cx", function(d){ return xScale(Math.random())})
        }
 
