@@ -33,44 +33,60 @@ angular.module('myApp.directives', []).
          svg.append("g").attr("class", "circles")
          svg.append("g").attr("class", "circle")
 
-         var circles = d3.select(".circles").selectAll("circles")
-            .data(scope.shapes1).enter()
+         var circles = d3.select(".circles").selectAll("circle")
+            .data(scope.shapes2).enter()
             .append("circle")
              .attr({     
                "class":"bluecircle",
                "cx": -80,
-               "cy": function(d) {return yScale(Math.random()},
+               "cy": function(d) {return yScale(Math.random())},
                "r": 12,
-               "fill": "#blue"
+               "fill": "blue"
              })
+        
 
-         var squares = d3.select(".squares").selectAll("rect")
-            .data(scope.shapes1).enter()
+        setInterval(function(){
+          d3.select(".circles").selectAll("circle.bluecircle")
+            .transition().duration(1000)
+            .attr("fill", function(d) {
+                  return (Math.random() >= .5) ? "blue" : "#ff9900"
+            })
+        }, 2000)
+
+        var squares = d3.select(".squares").selectAll("rect")
+            .data(scope.shapes2).enter()
             .append("rect")
              .attr({     
                "class":"rectangle",
                "x": -80,
-               "y": function(d) {return yScale(Math.random()},
+               "y": function(d) {return yScale(Math.random())},
                "height": 24,
                "width": 24,
-               "fill": "#blue"
+               "fill": "red"
              })
 
         d3.select(".circle").append("circle")
              .attr({     
                "class":"redcircle",
                "cx": -80,
-               "cy": function(d) {return yScale(Math.random()},
+               "cy": function(d) {return yScale(Math.random())},
                "r": 12,
-               "fill": "#red"
+               "fill": "red"
              }).on("click", function(){
 
                 d3.select(".redcircle")
                   .transition().duration(700)
-                  .attr("fill", "yellow")
+                  .attr("fill", "#88ff00")
 
              })
 
+        d3.selectAll("rect")
+            .transition().duration(1000).delay(500)
+            .attr("x", function(d){ return xScale(Math.random())})
+
+        d3.selectAll("circle")
+            .transition().duration(1000).delay(500)
+            .attr("cx", function(d){ return xScale(Math.random())})
        }
 
     };

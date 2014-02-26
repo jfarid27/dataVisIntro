@@ -11,7 +11,7 @@ angular.module('myApp.controllers', []).
     $scope.shapes1 = d3.range(50).map(function(d){
       return {"x": Math.random(), "y":Math.random() }
     });
-    $scope.shapes2 = d3.range(30).map(function(d){
+    $scope.shapes2 = d3.range(70).map(function(d){
       return {"x": Math.random(), "y":Math.random() }
     });
     $scope.shapes3 = d3.range(30).map(function(d){
