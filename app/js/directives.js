@@ -9,6 +9,187 @@ angular.module('myApp.directives', []).
       elm.text(version);
     };
   }]).
+  directive('conclusion', [ function() {
+    return {
+      restrict: 'E',
+      link: function(scope,elems, attrs){
+
+var margin = {top: 20, right: 80, bottom: 30, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 450 - margin.top - margin.bottom;
+var svg = d3.select("conclusion").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var parseDate = d3.time.format("%Y%m%d").parse;
+
+var x = d3.time.scale()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var color = d3.scale.category10();
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var line = d3.svg.line()
+    .interpolate("basis")
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.temperature); });
+
+d3.tsv("data/data.tsv", function(error, data) {
+  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
+
+  data.forEach(function(d) {
+    d.date = parseDate(d.date);
+  });
+
+  var cities = color.domain().map(function(name) {
+    return {
+      name: name,
+      values: data.map(function(d) {
+        return {date: d.date, temperature: +d[name]};
+      })
+    };
+  });
+
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+
+  y.domain([
+    d3.min(cities, function(c) { return d3.min(c.values, function(v) { return v.temperature; }); }),
+    d3.max(cities, function(c) { return d3.max(c.values, function(v) { return v.temperature; }); })
+  ]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Temperature (ºF)");
+
+  var city = svg.selectAll(".city")
+      .data(cities)
+    .enter().append("g")
+      .attr("class", "city");
+
+  city.append("path")
+      .attr("class", "line")
+      .attr("d", function(d) { return line(d.values); })
+      .style("stroke", function(d) { return color(d.name); });
+
+  city.append("text")
+      .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+      .attr("x", 3)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name; });
+});
+
+      }
+    };
+  }]).
+  directive('eyes3', [ function() {
+    return {
+      restrict: 'E',
+      link: function(scope,elems, attrs){
+         
+         var window = d3.select("eyes3")
+
+         var width = 960,
+         height = 450;
+         var clicked = false; 
+         var svg = window.append("svg")
+           .attr("width", width)
+           .attr("height", height);
+         var button = svg.append("text")
+            .attr({ 
+                   "x": width-50,
+                   "y": height -40
+            })
+            .style({
+               "font-family":"inherit",
+               "font-size": 24,
+               "fill":"grey"
+            })
+            .text("Next")
+              .on("click", function(){
+                 if (!clicked){
+                   clicked = true;
+                     
+                   d3.select("rect.left")
+                     .transition().duration(1200)
+                     .attr("x", 450-60)
+
+                   d3.select("rect.right")
+                     .transition().duration(1200)
+                     .attr("x", 450)
+                 
+
+                 } else {
+                   clicked = false;
+                   d3.select("rect.left")
+                     .transition().duration(1200)
+                     .attr("x", 270)
+
+                   d3.select("rect.right")
+                     .transition().duration(1200)
+                     .attr("x", 570)
+                 }
+              });
+
+        d3.select("svg").append("g").attr("class", "squares");
+
+        var squares = d3.select("g.squares");
+
+        squares.append("rect")
+            .attr({"x":150, 
+                   "y":45, 
+                   "height":250, 
+                   "width":300, 
+                   "fill":"#FFFF00"})
+        squares.append("rect")
+            .attr({"x":450, 
+                   "y":45, 
+                   "height":250, 
+                   "width":300, 
+                   "fill":"grey"})
+        squares.append("rect")
+            .attr({"x":270, 
+                   "y":95, 
+                   "height":150, 
+                   "width":60,
+                   "class":"left",
+                   "fill":"#CCCC00"})
+
+        squares.append("rect")
+            .attr({"x":570, 
+                   "y":95, 
+                   "height":150, 
+                   "width":60, 
+                   "class":"right",
+                   "fill":"#CCCC00"})
+
+ 
+      }
+    };
+  }]).
   directive('eyes2', [ function() {
     return {
       restrict: 'E',
